@@ -33,7 +33,7 @@ export const FlightProvider = ({ children }) => {
       // );
 
       const response = await fetch(
-        `https:///airkart-backend.onrender.com/api/flights?from=${from}&to=${to}&outbound_date=${date}&return_date=${
+        `https://airkart-backend.onrender.com/api/flights?from=${from}&to=${to}&outbound_date=${date}&return_date=${
           returnDate || ""}`
       );
 
