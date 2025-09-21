@@ -8,7 +8,7 @@ import Home from "./Pages/Home";
 import About from "./Pages/About";
 import Flights from "./Pages/Flights";
 import AboutFlightDetails from "./Pages/Passengerform";
-import ChooseFlight from "./Components/chooseFlight";
+import ChooseFlight from "./Components/ChooseFlight";
 import BookedTicket from "./Pages/BookedTicket";
 import { BiBrightness } from "react-icons/bi";
 
