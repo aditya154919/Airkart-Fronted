@@ -10,7 +10,7 @@ const Flights = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <img src="/public/assets/flght.gif"/>
+        <img src="/flght.gif"/>
       </div>
     );
   }

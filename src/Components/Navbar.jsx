@@ -18,7 +18,7 @@ const Navbar = ({openNav,setOpenNav}) => {
         onClick={() => navigate("/")}
       >
         <img
-          src="../public/assets/bg.png"
+          src="/bg.png"
           className="max-w-[120px] h-[10px] md:max-w-full hidden md:block "
         ></img>
         <p className="text-white md:text-2xl font-bold text-3xl">
@@ -95,7 +95,7 @@ const Navbar = ({openNav,setOpenNav}) => {
         </div>
       </div>
       <div className="md:flex items-center justify-center hidden ">
-        <img src="../public/assets/bg2.png"></img>
+        <img src="/bg2.png"></img>
       </div>
 
        <div
