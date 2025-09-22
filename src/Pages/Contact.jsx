@@ -11,12 +11,12 @@ const Contact = () => {
           <div className="text-gray-600 space-y-6">
             <div>
               <h3 className="text-2xl font-semibold">Contact Info</h3>
-              <p className="text-gray-600">Have a question or need support? We're here to help you with your electronics journey.</p>
+              <p className="text-gray-600">Have a question or need support? We're here to help you with your travel journey.</p>
             </div>
             <div>
               <p><strong>📍 Address:</strong> 123 Ramapuram, Chennai, India</p>
               <p><strong>📧 Email:</strong> support@AirKart.com</p>
-              <p><strong>📞 Phone:</strong> +91 7070397841</p>
+              <p><strong>📞 Phone:</strong> +91 79874****1</p>
             </div>
           </div>
 
