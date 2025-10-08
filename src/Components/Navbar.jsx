@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import {SignedIn,SignedOut,SignInButton,UserButton,} from "@clerk/clerk-react";
 import { AiOutlineAlignLeft } from "react-icons/ai";
 import { AiOutlineAlignRight } from "react-icons/ai";
 import ResponsiveMenu from "./ResponsiveMenu";
 
+
 const Navbar = ({openNav,setOpenNav}) => {
   const navigate = useNavigate();
+  const [loggedin, isLoggedIn] = useState(false);
   
   function openhandler() {
     setOpenNav(!openNav);
+  }
+
+  function signhandler(){
+    navigate("/login")
+  }
+  function logghandler(){
+    navigate("/login")
   }
   return (
     <div className="flex flex-row backdrop-blur-4xl  md:justify-around justify-between   md:p-0  ">
@@ -85,18 +93,21 @@ const Navbar = ({openNav,setOpenNav}) => {
      
       {/* button */}
       <div className="flex items-center justify-center">
-        <div className="hidden md:block">
-          <SignedOut>
-            <SignInButton className="bg-white/70 backdrop-blur-3xl px-3 py-2  text-xl cursor-pointer rounded-md text-sky-600 font-semibold" />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </div>
+        {
+        !isLoggedIn &&(
+          <button className="bg-white/70 backdrop-blur-3xl px-3 py-2  text-xl cursor-pointer rounded-md text-sky-600 font-semibold">Logout</button>
+        )
+      }
+      {
+        isLoggedIn &&(
+          <div className="flex justify-center items-center gap-2">
+          <button className="bg-white/70 backdrop-blur-3xl px-3 py-2  text-xl cursor-pointer rounded-md text-sky-600 font-semibold" onClick={signhandler}>Sign up</button>
+          <button className="bg-white/70 backdrop-blur-3xl px-3 py-2  text-xl cursor-pointer rounded-md text-sky-600 font-semibold " onClick={logghandler}>Login</button>
+          </div>
+        )
+      }
       </div>
-      <div className="md:flex items-center justify-center hidden ">
-        <img src="/assets/bg2.png"></img>
-      </div>
+      
 
        <div
         className="flex items-center  md:hidden text-3xl text-gray-500 px-5  "
@@ -120,3 +131,9 @@ const Navbar = ({openNav,setOpenNav}) => {
 };
 
 export default Navbar;
+
+
+
+
+
+

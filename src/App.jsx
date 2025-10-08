@@ -10,7 +10,15 @@ import Flights from "./Pages/Flights";
 import AboutFlightDetails from "./Pages/Passengerform";
 import ChooseFlight from "./Components/ChooseFlight";
 import BookedTicket from "./Pages/BookedTicket";
-import { BiBrightness } from "react-icons/bi";
+import SignIn from "./Authentication/SignIn";
+import TermsAndConditions from "./Pages/TermsAndConditions";
+import CancellationRefund from "./Pages/CancellationRefund";
+import ShippingPolicy from "./Pages/ShippingPolicy";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
+
+// import { LogIn } from "lucide-react";
+// import Emailverify from "./Authentication/Emailverify";
+
 
 const App = () => {
   const location = useLocation();
@@ -47,9 +55,16 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/chooseflight" element={<ChooseFlight />} />
             <Route path="/bookedticket" element={<BookedTicket/>} />
+            {/* // <Route path="/auth" element={<Auth/>}/> */}
+            <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
+            <Route path="/cancellation-refund" element={<CancellationRefund/>}/>
+            <Route path="/shipping-policy" element={<ShippingPolicy/>}/>
+            <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
             <Route path="/flightdetails" element={<AboutFlightDetails />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/flight" element={<Flights />} />
+            <Route path="/login" element={<SignIn/>}/>
+           
           </Routes>
         </motion.div>
       </AnimatePresence>

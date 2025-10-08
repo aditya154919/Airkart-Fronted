@@ -1,10 +1,10 @@
-import {SignedIn,SignedOut,SignInButton,UserButton, SignOutButton, useUser } from '@clerk/clerk-react'
+// import {SignedIn,SignedOut,SignInButton,UserButton, SignOutButton, useUser } from '@clerk/clerk-react'
 import { FaUserCircle } from "react-icons/fa";
 import React from 'react'
 import { Link } from 'react-router-dom';
 
 const ResponsiveMenu = ({openNav,setOpenNav}) => {
-  const {user} = useUser();
+  // const {user} = useUser();
   return (
    <>
    {
@@ -37,7 +37,7 @@ const ResponsiveMenu = ({openNav,setOpenNav}) => {
 
         {/* Sign up */}
 
-        <div className="mt-10">
+        {/* <div className="mt-10">
           
 
           <SignedOut>
@@ -55,7 +55,7 @@ const ResponsiveMenu = ({openNav,setOpenNav}) => {
               </button>
             </SignOutButton>
           </SignedIn>
-        </div>
+        </div> */}
 
         <p className=" px-2 mt-30">
           Made by <span className="font-bold"> Aditya & Pradyuman❤️</span>
