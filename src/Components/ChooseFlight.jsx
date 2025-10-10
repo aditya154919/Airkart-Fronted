@@ -1,19 +1,19 @@
-
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { GoArrowRight } from "react-icons/go";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFlights } from "../Context/ApiContext";
 import { TbPointFilled } from "react-icons/tb";
 import { GiSchoolBag } from "react-icons/gi";
 import { BsFillSuitcaseFill } from "react-icons/bs";
-import { useUser,} from "@clerk/clerk-react";
+import { Appcontext } from "../Context/Appcontext";
 
 const ChooseFlight = () => {
-  const { city,discount,setDiscount } = useFlights();
+  const { city, discount, setDiscount } = useFlights();
   const location = useLocation();
   const { flight, item } = location.state || {};
-  const { isSignedIn} = useUser();
+
   const navigate = useNavigate();
+  const { isLoggedIn, setIsLogin } = useContext(Appcontext);
 
   if (!flight) return <p>No flight selected</p>;
 
@@ -31,15 +31,12 @@ const ChooseFlight = () => {
     : "UNKNOWN";
 
   const [selected, setSelected] = useState("");
-  
-  
-
 
   const offers = [
     {
       code: "INSTANT",
       discount: "₹305 Off",
-      chutt:305,
+      chutt: 305,
       description:
         "Coupon applied! Enjoy an instant discount of ₹305 and receive a Hotel discount code after your booking.",
       color: "text-green-600",
@@ -47,7 +44,7 @@ const ChooseFlight = () => {
     {
       code: "NEWFLY",
       discount: "₹190 Off + ₹238",
-      chutt:428,
+      chutt: 428,
       description:
         "Get an instant discount of ₹190 on this booking and ₹238 ixigo money post this booking. Use it 100% on next booking.",
       color: "text-gray-700",
@@ -55,18 +52,15 @@ const ChooseFlight = () => {
     {
       code: "IXYESD",
       discount: "₹465 Off",
-      chutt:465,
+      chutt: 465,
       description: "Get flat 8% Off up to ₹750 with Yes Bank Credit Card",
       color: "text-gray-700",
     },
   ];
 
-
-  function discountHandler(offers){
+  function discountHandler(offers) {
     setDiscount(offers.chutt);
-    
   }
-
 
   // time calculation
   const formatDuration = (minutes) => {
@@ -76,19 +70,16 @@ const ChooseFlight = () => {
     return `${h}h ${m}m`;
   };
 
-
-  function clickHandler(){
-  while(!isSignedIn) {
-    alert("Sign in first!");
-    return
+  function clickHandler() {
+    while (!isLoggedIn) {
+      alert("Login in first!");
+      return;
+    }
+    navigate("/flightdetails", { state: { flight, item } });
   }
-   navigate('/flightdetails', { state: { flight, item } });
-  }
-
 
   return (
     <div className="p-5  rounded-2xl  backdrop-blur-lg">
-      
       <div className="flex flex-row gap-2 text-5xl items-center font-semibold mb-1 ">
         <h1 className="text-gray-800">{departureCity}</h1>
         <GoArrowRight className="mt-1 text-shadow-gray-700" />
@@ -105,14 +96,14 @@ const ChooseFlight = () => {
         </p>
       </div>
 
-      {/* Flights + Layovers */}
+      
       {item?.flights && item.flights.length > 0 ? (
         <div className="flex flex-wrap gap-4 mt-10 ">
           {item.flights.map((data, index) => (
             <React.Fragment key={index}>
-              {/* Flight Card */}
+             
               <div className="flex flex-row items-center bg-white/70 justify-between p-5 rounded-2xl backdrop-blur-2xl shadow-xl w-[650px] h-[120px] cursor-pointer hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
-                {/* Airline Info */}
+               
                 <div className="flex flex-row gap-1 items-center">
                   <img
                     src={item.airline_logo}
@@ -125,7 +116,7 @@ const ChooseFlight = () => {
                   </div>
                 </div>
 
-                {/* Departure */}
+                
                 <div className="flex flex-col gap-1 items-center">
                   <h1 className="text-xl font-semibold">
                     {data?.departure_airport?.time
@@ -138,10 +129,12 @@ const ChooseFlight = () => {
                         })
                       : "—"}
                   </h1>
-                  <h1 className="font-semibold">{data?.departure_airport?.id}</h1>
+                  <h1 className="font-semibold">
+                    {data?.departure_airport?.id}
+                  </h1>
                 </div>
 
-                {/* Duration */}
+                
                 <div className="flex flex-col gap-[2px] items-center">
                   <div className="text-lg font-sans">
                     {data?.duration ? formatDuration(data.duration) : "N/A"}
@@ -150,23 +143,24 @@ const ChooseFlight = () => {
                   <h1 className="text-gray-700">Flight</h1>
                 </div>
 
-                {/* Arrival */}
+               
                 <div className="flex flex-col gap-1 items-center">
                   <h1 className="text-xl font-semibold">
                     {data?.arrival_airport?.time
-                      ? new Date(
-                          data.arrival_airport.time
-                        ).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: false,
-                        })
+                      ? new Date(data.arrival_airport.time).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          }
+                        )
                       : "—"}
                   </h1>
                   <h1 className="font-semibold">{data?.arrival_airport?.id}</h1>
                 </div>
 
-                {/* Price only on first card */}
+               
                 {index === 0 && (
                   <div className="items-center text-3xl font-semibold">
                     ₹{item?.price ? Math.floor((item.price * 88) / 2) : "—"}
@@ -174,15 +168,14 @@ const ChooseFlight = () => {
                 )}
               </div>
 
-              {/* Show Layover after each flight except last */}
+              
               {index < item.flights.length - 1 && item.layovers[index] && (
                 <div className="flex flex-col items-center justify-center p-4 rounded-xl  bg-white/60 shadow-md w-[400px] text-center">
                   <p className="text-lg font-serif">
                     Layover at {item.layovers[index]?.name || "Unknown"}
                   </p>
                   <p className="text-gray-700">
-                    Duration:{" "}
-                    {formatDuration(item.layovers[index]?.duration)}
+                    Duration: {formatDuration(item.layovers[index]?.duration)}
                   </p>
                 </div>
               )}
@@ -249,7 +242,7 @@ const ChooseFlight = () => {
         </div>
       )}
 
-      {/* Class & Baggage */}
+     
       <div className="flex flex-col gap-1 p-2 mt-4 text-lg text-gray-700">
         <p className="text-xl"> Class: {flight?.travel_class}</p>
         <p className="flex flex-row items-center gap-2">
@@ -262,7 +255,9 @@ const ChooseFlight = () => {
 
       {/* Offers */}
       <div className="mt-4">
-        <h2 className="text-2xl text-gray-800 font-bold mb-4 px-1">Offers For You</h2>
+        <h2 className="text-2xl text-gray-800 font-bold mb-4 px-1">
+          Offers For You
+        </h2>
 
         <input
           type="text"
@@ -276,7 +271,10 @@ const ChooseFlight = () => {
               key={offer.code}
               className="flex flex-col border rounded-lg p-4 cursor-pointer shadow-sm hover:shadow-md transition w-full"
             >
-              <div className="flex text-gray-800 justify-between items-center"  onClick={() =>discountHandler(offer)}>
+              <div
+                className="flex text-gray-800 justify-between items-center"
+                onClick={() => discountHandler(offer)}
+              >
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
@@ -300,8 +298,9 @@ const ChooseFlight = () => {
         </div>
       </div>
 
-      <div className="w-[180px] flex items-center gap-2 mt-3 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl cursor-pointer shadow-lg text-lg"
-       onClick={clickHandler}
+      <div
+        className="w-[180px] flex items-center gap-2 mt-3 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl cursor-pointer shadow-lg text-lg"
+        onClick={clickHandler}
       >
         Procced to pay
       </div>
@@ -310,5 +309,3 @@ const ChooseFlight = () => {
 };
 
 export default ChooseFlight;
-
-

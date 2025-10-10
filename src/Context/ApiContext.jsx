@@ -47,7 +47,7 @@ export const FlightProvider = ({ children }) => {
       const result = await response.json();
       setFlights(
         result.other_flights || result.best_flights || result.airports || []
-      ); // ✅ store in state
+      ); 
       setCity(result.airports);
       console.log("Fetch citys:", result.airports);
       console.log(
@@ -61,7 +61,7 @@ export const FlightProvider = ({ children }) => {
     }
   };
 
-  // Only run when from/to/date changes
+ 
   useEffect(() => {
     fetchFlights();
   }, [from, to, date]);
@@ -108,5 +108,5 @@ export const FlightProvider = ({ children }) => {
   );
 };
 
-// Custom hook
+
 export const useFlights = () => useContext(FlightContext);

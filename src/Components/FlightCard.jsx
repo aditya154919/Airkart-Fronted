@@ -21,7 +21,7 @@ const FlightCard = ({ flight, item, city }) => {
       className="flex flex-col p-5 rounded-2xl backdrop-blur-2xl shadow-xl w-[550px] bg-white/70 cursor-pointer hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 border border-gray-200"
       onClick={clickHandler}
     >
-      {/* Airline + Price */}
+     
       <div className="flex  flex-row justify-between items-center mb-1">
         <div className="flex flex-row gap-2 items-center text-2xl">
           <img
@@ -39,7 +39,7 @@ const FlightCard = ({ flight, item, city }) => {
 
       <div className="border-b border-gray-300 mb-2"></div>
 
-      {/* From / To */}
+     
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col items-start">
           <h1 className="text-3xl font-bold">{from || "—"}</h1>
@@ -61,7 +61,7 @@ const FlightCard = ({ flight, item, city }) => {
             : "0"}</p>
       </div>
 
-      {/* Times + Duration */}
+     
       <div className="flex flex-row justify-between items-center mt-2">
         <h1 className="text-lg flex flex-row gap-1 items-center font-medium">
           <MdFlightTakeoff className="text-blue-500 text-2xl" />

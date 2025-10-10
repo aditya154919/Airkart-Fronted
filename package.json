@@ -12,8 +12,8 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.46.0",
     "@tailwindcss/vite": "^4.1.12",
-    "axios": "^1.11.0",
-    "framer-motion": "^12.23.22",
+    "axios": "^1.12.2",
+    "framer-motion": "^12.23.24",
     "lucide-react": "^0.544.0",
     "motion": "^12.23.12",
     "qrcode.react": "^4.2.0",

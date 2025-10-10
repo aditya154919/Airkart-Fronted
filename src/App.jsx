@@ -15,6 +15,7 @@ import TermsAndConditions from "./Pages/TermsAndConditions";
 import CancellationRefund from "./Pages/CancellationRefund";
 import ShippingPolicy from "./Pages/ShippingPolicy";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
+import Resetpass from "./Authentication/Resetpass";
 
 // import { LogIn } from "lucide-react";
 // import Emailverify from "./Authentication/Emailverify";
@@ -64,6 +65,7 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/flight" element={<Flights />} />
             <Route path="/login" element={<SignIn/>}/>
+            <Route path="/resetpass" element={<Resetpass/>}/>
            
           </Routes>
         </motion.div>

@@ -1,10 +1,17 @@
-import React from "react";
-import { useState } from "react";
+
+import React, { useContext, useState } from "react";
+import axios from "axios";
+import { MdAirplaneTicket, MdPayment } from "react-icons/md";
+import { FaSuitcase } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { Appcontext } from "../Context/Appcontext";
 
 const SignIn = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const { isLoggedIn, setIsLogin, user, setUser, backendurl } = useContext(Appcontext);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -12,116 +19,188 @@ const SignIn = () => {
     password: "",
   });
 
+ 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  
+  const clickhandler = () => {
+    navigate("/resetpass");
+  };
+
+  
   const toggleForm = () => {
-    setIsLogin(!isLogin);
+    setIsLogin(!isLoggedIn);
     setFormData({ name: "", email: "", password: "" });
+    setMessage("");
+  };
+
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      axios.defaults.withCredentials = true;
+
+      const url = isLoggedIn
+        ? `http://localhost:5000/api/v1/login`
+        : `http://localhost:5000/api/v1/signup`;
+
+      const { data } = await axios.post(url, formData, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (data.success) {
+        setUser(data.user);
+        
+        console.log("User Data:", data.user);
+        navigate("/");
+      } else {
+        setMessage(data.message || "Failed. Try again!");
+      }
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Something went wrong. Try again!");
+      console.log("Error:", error.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex justify-center mt-5  relative overflow-hidden">
-      {/* <Toaster position="top-center" reverseOrder={false} /> */}
-
-      {/* Floating circles for animation background */}
+    <div className="flex justify-center items-center ">
       <motion.div
-        className=" absolute w-72 h-72  rounded-full blur-3xl -top-10 -left-10"
-        animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 6 }}
-      />
-      <motion.div
-        className="absolute w-72 h-72  rounded-full blur-3xl bottom-0 right-0"
-        animate={{ y: [0, -20, 0], x: [0, -10, 0] }}
-        transition={{ repeat: Infinity, duration: 8 }}
-      />
-
-      {/* Auth Card */}
-      <motion.div
-        layout
-        className="backdrop-blur-2xl shadow-2xl rounded-2xl w-full max-w-md p-8 bg-white/20 border border-white/30 z-10"
-        initial={{ scale: 0.8, opacity: 0 }}
+        initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.5 }}
+        className="flex w-[900px] bg-white shadow-2xl rounded-lg overflow-hidden"
       >
-        <h2 className="text-3xl font-semibold text-center text-white mb-6">
-          {isLogin
-            ? "Welcome Back-Please login 👋"
-            : "Welcome to Airkart Create Your Account 🚀"}
-        </h2>
+       
+        <div className="bg-orange-600 text-white w-1/2 flex flex-col justify-center items-start gap-10 px-10 py-12">
+          <div className="flex items-center gap-3 text-2xl font-medium">
+            <MdAirplaneTicket className="text-4xl bg-white/20 p-1 rounded-full" />
+            Fast & easy flight bookings
+          </div>
+          <div className="flex items-center gap-3 text-2xl font-medium">
+            <MdPayment className="text-4xl bg-white/20 p-1 rounded-full" />
+            Seamless & secure payments
+          </div>
+          <div className="flex items-center gap-3 text-2xl font-medium">
+            <FaSuitcase className="text-4xl bg-white/20 p-1 rounded-full" />
+            Manage trips & get instant tickets
+          </div>
+        </div>
 
-        <AnimatePresence mode="wait">
-          <motion.form
-            key={isLogin ? "login" : "signup"}
-            initial={{ opacity: 0, x: isLogin ? 100 : -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: isLogin ? -100 : 100 }}
-            transition={{ duration: 0.5 }}
-            // onSubmit={handleSubmit}
-            className="flex flex-col gap-4"
-          >
-            {!isLogin && (
+        
+        <div className="w-1/2 p-10 flex flex-col justify-center">
+          <h2 className="text-3xl font-semibold text-gray-800 text-center mb-6">
+            {isLoggedIn
+              ? "Log in to Airkart ✈️"
+              : "Create your Airkart Account 🚀"}
+          </h2>
+
+          <AnimatePresence mode="wait">
+            <motion.form
+              key={isLoggedIn ? "login" : "signup"}
+              initial={{ opacity: 0, x: isLoggedIn ? 100 : -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: isLoggedIn ? -100 : 100 }}
+              transition={{ duration: 0.4 }}
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-4"
+            >
+              {!isLoggedIn && (
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+              )}
+
               <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                // onChange={handleChange}
-                className="border-none rounded-lg p-3 focus:outline-none focus:ring-2 bg-gray-400 text-black placeholder-white/70"
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               />
-            )}
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              // onChange={handleChange}
-              className="border-none rounded-lg p-3 focus:outline-none focus:ring-2 bg-gray-400 text-black placeholder-white/70"
-              required
-            />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+              />
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              // onChange={handleChange}
-              className="border-none rounded-lg p-3 focus:outline-none focus:ring-2 bg-gray-400 text-black placeholder-white/70"
-              required
-            />
-
-            <button
-              type="submit"
-              // disabled={loading}
-              className="bg-sky-300 text-black py-2 rounded-lg font-semibold hover:bg-sky-400 transition disabled:opacity-60"
-            >
-              {loading ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 1 }}
-                  className="border-2 border-black border-t-transparent w-5 h-5 rounded-full mx-auto"
-                ></motion.div>
-              ) : isLogin ? (
-                "Login"
-              ) : (
-                "Sign Up"
+              {isLoggedIn && (
+                <p
+                  className="text-blue-500 cursor-pointer text-[15px]"
+                  onClick={clickhandler}
+                >
+                  Forgot password ?
+                </p>
               )}
-            </button>
-          </motion.form>
-        </AnimatePresence>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-6 text-center text-sm text-white"
-        >
-          {isLogin ? "Don’t have an account?" : "Already registered?"}{" "}
-          <button
-            onClick={toggleForm}
-            className="text-yellow-300 font-medium hover:underline"
-          >
-            {isLogin ? "Sign Up" : "Login"}
-          </button>
-        </motion.div>
+              <button
+                type="submit"
+                className="bg-orange-600 text-white py-2 rounded-md font-semibold hover:bg-orange-700 transition"
+                disabled={loading}
+              >
+                {loading ? "Please wait..." : isLoggedIn ? "Login" : "Sign Up"}
+              </button>
+            </motion.form>
+          </AnimatePresence>
+
+          {message && (
+            <p
+              className={`text-center mt-4 text-sm ${
+                message.includes("Success") ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {message}
+            </p>
+          )}
+
+          <div className="text-center mt-6 text-gray-700">
+            {isLoggedIn ? "Don’t have an account?" : "Already have an account?"}{" "}
+            <button
+              onClick={toggleForm}
+              className="text-orange-600 font-semibold hover:underline"
+            >
+              {isLoggedIn ? "Sign Up" : "Login"}
+            </button>
+          </div>
+
+          <p className="text-[13px] mt-5 text-gray-500 ">
+            This website is only for testing purpose — how a real flight ticket
+            booking system works.{" "}
+            <a
+              className="border-b-[1px] text-orange-600 cursor-pointer"
+              onClick={() => navigate("/privacy-policy")}
+            >
+              Privacy policy
+            </a>{" "}
+            and{" "}
+            <a
+              className="text-orange-600 border-b-[1px] cursor-pointer"
+              onClick={() => navigate("/terms-and-conditions")}
+            >
+              Terms and conditions
+            </a>
+            .
+          </p>
+        </div>
       </motion.div>
     </div>
   );
