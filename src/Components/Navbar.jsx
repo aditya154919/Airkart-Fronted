@@ -22,7 +22,7 @@ const Navbar = ({ openNav, setOpenNav }) => {
   async function logoutHandler() {
     try {
       
-      await axios.post("https://airkart-backend.onrender.com/api/v1/logout", {
+      await axios.post(`https://airkart-backend.onrender.com/api/v1/logout`, {
         withCredentials: true,
       });
 

@@ -46,8 +46,8 @@ const SignIn = () => {
       axios.defaults.withCredentials = true;
 
       const url = isLoggedIn
-        ? `"https://airkart-backend.onrender.com/api/v1/login`
-        : `"https://airkart-backend.onrender.com/api/v1/signup`;
+        ? `https://airkart-backend.onrender.com/api/v1/login`
+        : `https://airkart-backend.onrender.com/api/v1/signup`;
 
       const { data } = await axios.post(url, formData, {
         headers: { "Content-Type": "application/json" },
