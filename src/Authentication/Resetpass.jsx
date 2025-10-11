@@ -22,7 +22,7 @@ const Resetpass = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/send-reset-otp",
+        "https://airkart-backend.onrender.com/api/v1/send-reset-otp",
         { email },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -44,7 +44,7 @@ const Resetpass = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/reset-pass",
+        "https://airkart-backend.onrender.com/api/v1/reset-pass",
         { email, otp, newPassword },
         { headers: { "Content-Type": "application/json" } }
       );
