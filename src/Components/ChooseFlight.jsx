@@ -13,7 +13,7 @@ const ChooseFlight = () => {
   const { flight, item } = location.state || {};
 
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLogin } = useContext(Appcontext);
+  const { loggedIn, setLoggedIn } = useContext(Appcontext);
 
   if (!flight) return <p>No flight selected</p>;
 
@@ -71,7 +71,7 @@ const ChooseFlight = () => {
   };
 
   function clickHandler() {
-    while (!isLoggedIn) {
+    while (!loggedIn) {
       alert("Login in first!");
       return;
     }

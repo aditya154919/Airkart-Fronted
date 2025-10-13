@@ -1,4 +1,3 @@
-
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AiOutlineAlignLeft, AiOutlineAlignRight } from "react-icons/ai";
@@ -8,7 +7,7 @@ import axios from "axios";
 
 const Navbar = ({ openNav, setOpenNav }) => {
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLogin, user, setUser } = useContext(Appcontext);
+  const { loggedIn, setLoggedIn, user, setUser } = useContext(Appcontext);
 
   function openhandler() {
     setOpenNav(!openNav);
@@ -18,18 +17,14 @@ const Navbar = ({ openNav, setOpenNav }) => {
     navigate("/login");
   }
 
-  
   async function logoutHandler() {
     try {
-      
       await axios.post(`https://airkart-backend.onrender.com/api/v1/logout`, {
         withCredentials: true,
       });
 
-      
       setUser(null);
-      setIsLogin(false);
-
+      setLoggedIn(false);
     } catch (error) {
       console.error("Logout failed:", error.response?.data || error.message);
     }
@@ -107,23 +102,37 @@ const Navbar = ({ openNav, setOpenNav }) => {
         </ul>
       </div>
 
-      
-      <div className="flex items-center justify-center">
-        {isLoggedIn ? (
-          <button
-            className="bg-white/70 backdrop-blur-3xl px-3 py-2 text-xl cursor-pointer rounded-md text-sky-600 font-semibold"
-            onClick={logoutHandler}
+      <div className="flex items-center justify-center  rounded-full gap-4">
+        <div>
+          {loggedIn && user ? (
+          <div
+            title={user.name}
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-sky-400 text-white font-semibold text-2xl uppercase"
           >
-            Logout
-          </button>
+            {user.name ? user.name[0] : "U"}
+          </div>
         ) : (
-          <button
-            className="bg-white/70 backdrop-blur-3xl px-3 py-2 text-xl cursor-pointer rounded-md text-sky-600 font-semibold"
-            onClick={logghandler}
-          >
-            Login
-          </button>
+          <div className="w-10 h-10" />
         )}
+        </div>
+
+        <div className="flex items-center justify-center gap-3">
+          {loggedIn ? (
+            <button
+              className="bg-white/70 backdrop-blur-3xl px-3 py-2 text-xl cursor-pointer rounded-md text-sky-600 font-semibold"
+              onClick={logoutHandler}
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              className="bg-white/70 backdrop-blur-3xl px-3 py-2 text-xl cursor-pointer rounded-md text-sky-600 font-semibold"
+              onClick={logghandler}
+            >
+              Login
+            </button>
+          )}
+        </div>
       </div>
 
       <div
@@ -139,3 +148,4 @@ const Navbar = ({ openNav, setOpenNav }) => {
 };
 
 export default Navbar;
+

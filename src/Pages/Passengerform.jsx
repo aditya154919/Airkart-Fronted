@@ -35,7 +35,7 @@ const Passengerform = () => {
   const [selectedPayment, setSelectedPayment] = useState("");
   const [popup, setPopup] = useState({ show: false, message: "" });
 
-  // Keep passengerData synced with passenger count
+ 
   useEffect(() => {
     setPassengerData((prev) => {
       const newData = [...prev];
@@ -44,18 +44,18 @@ const Passengerform = () => {
     });
   }, [passenger]);
 
-  // Handle passenger input
+ 
   const handleInputChange = (index, field, value) => {
     const updated = [...passengerData];
     updated[index] = { ...updated[index], [field]: value };
     setPassengerData(updated);
   };
 
-  // Passenger counters
+ 
   const plusHandler = () => setPassenger(passenger + 1);
   const minusHandler = () => passenger > 0 && setPassenger(passenger - 1);
 
-  // Validate form before payment
+  
   const paymentHandler = () => {
     for (let i = 0; i < passenger; i++) {
       const p = passengerData[i] || {};
@@ -67,7 +67,6 @@ const Passengerform = () => {
     setShowPayment((prev) => !prev);
   };
 
-  // Helper to delay for async popup sequence
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const waitHandler = async () => {
@@ -275,3 +274,7 @@ const Passengerform = () => {
 };
 
 export default Passengerform;
+
+
+
+

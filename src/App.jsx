@@ -16,6 +16,7 @@ import CancellationRefund from "./Pages/CancellationRefund";
 import ShippingPolicy from "./Pages/ShippingPolicy";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Resetpass from "./Authentication/Resetpass";
+// import PaymentButton from "./Components/PaymentButton";
 
 // import { LogIn } from "lucide-react";
 // import Emailverify from "./Authentication/Emailverify";
@@ -24,7 +25,6 @@ import Resetpass from "./Authentication/Resetpass";
 const App = () => {
   const location = useLocation();
   const [openNav, setOpenNav] = useState(false);
-
   const isHome = location.pathname === "/chooseflight";
 
   const backgroundStyle = !isHome
@@ -66,6 +66,7 @@ const App = () => {
             <Route path="/flight" element={<Flights />} />
             <Route path="/login" element={<SignIn/>}/>
             <Route path="/resetpass" element={<Resetpass/>}/>
+            {/* <Route path="/payment" element={<PaymentButton/>}/> */}
            
           </Routes>
         </motion.div>

@@ -1,4 +1,3 @@
-
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { MdAirplaneTicket, MdPayment } from "react-icons/md";
@@ -8,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Appcontext } from "../Context/Appcontext";
 
 const SignIn = () => {
-  const { isLoggedIn, setIsLogin, user, setUser, backendurl } = useContext(Appcontext);
+  const { loggedIn, setLoggedIn, user, setUser, backendurl } =
+    useContext(Appcontext);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -19,24 +19,66 @@ const SignIn = () => {
     password: "",
   });
 
- 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
   const clickhandler = () => {
     navigate("/resetpass");
   };
 
-  
   const toggleForm = () => {
-    setIsLogin(!isLoggedIn);
+    setLoggedIn(!loggedIn);
     setFormData({ name: "", email: "", password: "" });
     setMessage("");
   };
 
-  
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setMessage("");
+
+  //   try {
+  //     axios.defaults.withCredentials = true;
+
+  //     const url = isLoggedIn
+  //       ? `https://airkart-backend.onrender.com/api/v1/login`
+  //       : `https://airkart-backend.onrender.com/api/v1/signup`;
+
+  //     const { data } = await axios.post(url, formData, {
+  //       headers: { "Content-Type": "application/json" },
+  //     });
+
+  //     // if (data.success) {
+  //     //   setUser(data.user);
+
+  //     //   console.log("User Data:", data.user);
+  //     //   navigate("/");
+  //     // } else {
+  //     //   setMessage(data.message || "Failed. Try again!");
+  //     // }
+
+  //     if (data.success) {
+  //       setUser(data.user);
+  //       setMessage("✅ Account created successfully! Redirecting...");
+  //       setLoading(false);
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 1200);
+  //     } else {
+  //       setMessage(data.message || "Failed. Try again!");
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     setMessage(
+  //       error.response?.data?.message || "Something went wrong. Try again!"
+  //     );
+  //     console.log("Error:", error.response?.data?.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -45,7 +87,7 @@ const SignIn = () => {
     try {
       axios.defaults.withCredentials = true;
 
-      const url = isLoggedIn
+      const url = loggedIn
         ? `https://airkart-backend.onrender.com/api/v1/login`
         : `https://airkart-backend.onrender.com/api/v1/signup`;
 
@@ -55,16 +97,29 @@ const SignIn = () => {
 
       if (data.success) {
         setUser(data.user);
+        setMessage(
+          loggedIn
+            ? "✅ Login successful! Redirecting..."
+            : "✅ Account created successfully! Redirecting..."
+        );
+
+ 
+        setLoading(false);
         
-        console.log("User Data:", data.user);
+
+        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         navigate("/");
       } else {
         setMessage(data.message || "Failed. Try again!");
+        setLoading(false);
       }
     } catch (error) {
-      setMessage(error.response?.data?.message || "Something went wrong. Try again!");
-      console.log("Error:", error.response?.data?.message);
-    } finally {
+      console.error("Error:", error.response?.data?.message);
+      setMessage(
+        error.response?.data?.message || "Something went wrong. Try again!"
+      );
       setLoading(false);
     }
   };
@@ -77,7 +132,6 @@ const SignIn = () => {
         transition={{ duration: 0.5 }}
         className="flex w-[900px] bg-white shadow-2xl rounded-lg overflow-hidden"
       >
-       
         <div className="bg-orange-600 text-white w-1/2 flex flex-col justify-center items-start gap-10 px-10 py-12">
           <div className="flex items-center gap-3 text-2xl font-medium">
             <MdAirplaneTicket className="text-4xl bg-white/20 p-1 rounded-full" />
@@ -93,25 +147,24 @@ const SignIn = () => {
           </div>
         </div>
 
-        
         <div className="w-1/2 p-10 flex flex-col justify-center">
           <h2 className="text-3xl font-semibold text-gray-800 text-center mb-6">
-            {isLoggedIn
+            {loggedIn
               ? "Log in to Airkart ✈️"
               : "Create your Airkart Account 🚀"}
           </h2>
 
           <AnimatePresence mode="wait">
             <motion.form
-              key={isLoggedIn ? "login" : "signup"}
-              initial={{ opacity: 0, x: isLoggedIn ? 100 : -100 }}
+              key={loggedIn ? "login" : "signup"}
+              initial={{ opacity: 0, x: loggedIn ? 100 : -100 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: isLoggedIn ? -100 : 100 }}
+              exit={{ opacity: 0, x: loggedIn ? -100 : 100 }}
               transition={{ duration: 0.4 }}
               onSubmit={handleSubmit}
               className="flex flex-col gap-4"
             >
-              {!isLoggedIn && (
+              {!loggedIn && (
                 <input
                   type="text"
                   name="name"
@@ -143,7 +196,7 @@ const SignIn = () => {
                 required
               />
 
-              {isLoggedIn && (
+              {loggedIn && (
                 <p
                   className="text-blue-500 cursor-pointer text-[15px]"
                   onClick={clickhandler}
@@ -157,7 +210,7 @@ const SignIn = () => {
                 className="bg-orange-600 text-white py-2 rounded-md font-semibold hover:bg-orange-700 transition"
                 disabled={loading}
               >
-                {loading ? "Please wait..." : isLoggedIn ? "Login" : "Sign Up"}
+                {loading ? "Please wait..." : loggedIn ? "Login" : "Sign Up"}
               </button>
             </motion.form>
           </AnimatePresence>
@@ -173,12 +226,12 @@ const SignIn = () => {
           )}
 
           <div className="text-center mt-6 text-gray-700">
-            {isLoggedIn ? "Don’t have an account?" : "Already have an account?"}{" "}
+            {loggedIn ? "Don’t have an account?" : "Already have an account?"}{" "}
             <button
               onClick={toggleForm}
               className="text-orange-600 font-semibold hover:underline"
             >
-              {isLoggedIn ? "Sign Up" : "Login"}
+              {loggedIn ? "Sign Up" : "Login"}
             </button>
           </div>
 
