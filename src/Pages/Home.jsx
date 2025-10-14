@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useContext } from "react";
 import { MdFlightTakeoff, MdFlightLand } from "react-icons/md";
 import { GoPeople } from "react-icons/go";
 import { CiSearch } from "react-icons/ci";
@@ -63,7 +63,7 @@ const Home = ({ openNav }) => {
             >
               Book your Ticket Now ✈️
             </motion.h1>
-
+            
             {/* Search Card */}
             <div className="flex flex-col gap-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5  ">

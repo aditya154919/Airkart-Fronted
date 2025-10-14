@@ -71,11 +71,13 @@ const ChooseFlight = () => {
   };
 
   function clickHandler() {
-    while (!loggedIn) {
-      alert("Login in first!");
-      return;
+    if(loggedIn){
+      navigate("/flightdetails", { state: { flight, item } });
     }
-    navigate("/flightdetails", { state: { flight, item } });
+
+    else
+      navigate("/login");
+    
   }
 
   return (
@@ -298,12 +300,14 @@ const ChooseFlight = () => {
         </div>
       </div>
 
-      <div
-        className="w-[180px] flex items-center gap-2 mt-3 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl cursor-pointer shadow-lg text-lg"
+      <span
+        className=" flex items-center gap-2 mt-3 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl cursor-pointer shadow-lg text-lg"
         onClick={clickHandler}
       >
-        Procced to pay
-      </div>
+       {
+        loggedIn ? "Click to proceed":"Login To proceed"
+       }
+      </span>
     </div>
   );
 };

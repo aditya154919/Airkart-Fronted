@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./Components/Navbar";
@@ -16,6 +16,8 @@ import CancellationRefund from "./Pages/CancellationRefund";
 import ShippingPolicy from "./Pages/ShippingPolicy";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Resetpass from "./Authentication/Resetpass";
+import { Appcontext } from "./Context/Appcontext";
+
 // import PaymentButton from "./Components/PaymentButton";
 
 // import { LogIn } from "lucide-react";
@@ -26,6 +28,7 @@ const App = () => {
   const location = useLocation();
   const [openNav, setOpenNav] = useState(false);
   const isHome = location.pathname === "/chooseflight";
+  const {user,setUser} = useContext(Appcontext)
 
   const backgroundStyle = !isHome
     ? { backgroundImage: "url('/assets/vvv.jpeg')", backgroundSize: "cover", backgroundPosition: "center" }
@@ -41,6 +44,11 @@ const App = () => {
     >
       
       <Navbar openNav={openNav} setOpenNav={setOpenNav} />
+      <div className="text-4xl text-sky-500 font-semibold font-serif text-right px-10 md:px-73">
+              {
+                !user ? "":`Hello ${user.name.split(' ')[0]}`
+              }
+      </div>
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -49,7 +57,7 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -30 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className=" px-5 py-10  overflow-y-auto"
+          className=" px-5 py-5  overflow-y-auto"
         >
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home openNav={openNav} setOpenNav={setOpenNav} />} />
