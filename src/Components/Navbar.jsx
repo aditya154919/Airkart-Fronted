@@ -30,6 +30,14 @@ const Navbar = ({ openNav, setOpenNav }) => {
     }
   }
 
+  function logoutHandler(){
+    setUser(null);
+    setLoggedIn(false);
+
+  }
+
+   
+
   return (
     <div className="flex flex-row backdrop-blur-4xl md:justify-around justify-between md:p-0">
       <div
@@ -117,7 +125,7 @@ const Navbar = ({ openNav, setOpenNav }) => {
         </div>
 
         <div className="flex items-center justify-center gap-3">
-          {loggedIn ? (
+          {loggedIn && user ? (
             <button
               className="bg-white/70 backdrop-blur-3xl px-3 py-2 text-xl cursor-pointer rounded-md text-sky-600 font-semibold"
               onClick={logoutHandler}

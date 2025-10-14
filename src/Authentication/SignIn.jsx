@@ -28,56 +28,16 @@ const SignIn = () => {
   };
 
   const toggleForm = () => {
+
+    if(!user){
     setLoggedIn(!loggedIn);
     setFormData({ name: "", email: "", password: "" });
     setMessage("");
+    }
+    
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setMessage("");
 
-  //   try {
-  //     axios.defaults.withCredentials = true;
-
-  //     const url = isLoggedIn
-  //       ? `https://airkart-backend.onrender.com/api/v1/login`
-  //       : `https://airkart-backend.onrender.com/api/v1/signup`;
-
-  //     const { data } = await axios.post(url, formData, {
-  //       headers: { "Content-Type": "application/json" },
-  //     });
-
-  //     // if (data.success) {
-  //     //   setUser(data.user);
-
-  //     //   console.log("User Data:", data.user);
-  //     //   navigate("/");
-  //     // } else {
-  //     //   setMessage(data.message || "Failed. Try again!");
-  //     // }
-
-  //     if (data.success) {
-  //       setUser(data.user);
-  //       setMessage("✅ Account created successfully! Redirecting...");
-  //       setLoading(false);
-  //       setTimeout(() => {
-  //         navigate("/");
-  //       }, 1200);
-  //     } else {
-  //       setMessage(data.message || "Failed. Try again!");
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     setMessage(
-  //       error.response?.data?.message || "Something went wrong. Try again!"
-  //     );
-  //     console.log("Error:", error.response?.data?.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,6 +53,7 @@ const SignIn = () => {
 
       const { data } = await axios.post(url, formData, {
         headers: { "Content-Type": "application/json" },
+        withCredentials:true,
       });
 
       if (data.success) {
@@ -231,7 +192,7 @@ const SignIn = () => {
               onClick={toggleForm}
               className="text-orange-600 font-semibold hover:underline"
             >
-              {loggedIn ? "Sign Up" : "Login"}
+              {loggedIn  ? "Sign Up" : "Login"}
             </button>
           </div>
 

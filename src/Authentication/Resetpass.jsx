@@ -24,7 +24,7 @@ const Resetpass = () => {
       const response = await axios.post(
         `https://airkart-backend.onrender.com/api/v1/send-reset-otp`,
         { email },
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" },withCredentials:true }
       );
 
       setMessage(response.data.message || "OTP sent successfully!");
@@ -46,7 +46,7 @@ const Resetpass = () => {
       const response = await axios.post(
         `https://airkart-backend.onrender.com/api/v1/reset-pass`,
         { email, otp, newPassword },
-        { headers: { "Content-Type": "application/json" } }
+        {withCredentials:true, headers: { "Content-Type": "application/json" } }
       );
 
       setMessage(response.data.message || "Password reset successful!");
