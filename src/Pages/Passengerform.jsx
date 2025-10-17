@@ -1,15 +1,20 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useFlights } from "../Context/ApiContext";
 import { GoArrowRight } from "react-icons/go";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Appcontext } from "../Context/Appcontext";
+
 
 const Passengerform = () => {
   const { city, passenger, setPassenger, discount, setBookedTickets } = useFlights();
+  const {user} = useContext(Appcontext);
   const location = useLocation();
   const navigate = useNavigate();
   const { flight, item } = location.state || {};
+
 
   const departureCity = city?.[0]?.departure?.[0]?.city || "Unknown";
   const arrivalCity = city?.[0]?.arrival?.[0]?.city || "Unknown";
@@ -17,10 +22,12 @@ const Passengerform = () => {
   const farePrice = item?.price || 0;
   const departureTime = item?.flights[0]?.departure_airport?.time;
   const arrivalTime = item?.flights?.[item.flights.length - 1]?.arrival_airport?.time;
+  const airline = flight.airline;
+  const flightNumber = flight.flight_number;
 
+  console.log(airline);
+  console.log(flightNumber)
 
-  console.log(departureTime);
-  console.log(arrivalTime)
 
   // Price calculation
   const basePrice = Math.floor((farePrice * 88) / 2);
@@ -44,18 +51,15 @@ const Passengerform = () => {
     });
   }, [passenger]);
 
- 
   const handleInputChange = (index, field, value) => {
     const updated = [...passengerData];
     updated[index] = { ...updated[index], [field]: value };
     setPassengerData(updated);
   };
 
- 
   const plusHandler = () => setPassenger(passenger + 1);
   const minusHandler = () => passenger > 0 && setPassenger(passenger - 1);
 
-  
   const paymentHandler = () => {
     for (let i = 0; i < passenger; i++) {
       const p = passengerData[i] || {};
@@ -68,46 +72,88 @@ const Passengerform = () => {
   };
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
   const waitHandler = async () => {
-  if (!selectedPayment) return alert("Please select a payment method.");
-  if (!flight || !passengerData.length) return alert("Flight or passenger data missing!");
-
-  // Start popup sequence
-  setPopup({ show: true, message: "Processing payment..." });
-  await delay(2000);
-
-  setPopup({ show: true, message: "Payment Success ✅" });
-  await delay(1200);
-
-  // Save ticket
-  if (typeof setBookedTickets === "function") {
-    setBookedTickets({
-      flight,
-      passengers: 
-      passengerData,
-      total,
-      departureCity,
-      arrivalCity,
-      flightLogo,
-      departureTime,
-      arrivalTime
-    });
-  } else {
-    console.error("setBookedTickets is not defined!");
+  if (!user) {
+    alert("Please login first!");
+    return;
   }
 
-  setPopup({ show: true, message: "Ticket has been sent to your mail 📧" });
-  await delay(1200);
+  if (!selectedPayment) {
+    alert("Please select a payment method.");
+    return;
+  }
 
+  if (!flight || !passengerData.length) {
+    alert("Flight or passenger data missing!");
+    return;
+  }
+
+  setPopup({ show: true, message: "Processing payment..." });
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  setPopup({ show: true, message: "Payment Successful ✅" });
+  await new Promise((resolve) => setTimeout(resolve, 1200));
+
+  try {
+    const ticketData = {
+      userid: user.id,
+      passengers: passengerData.map((p) => ({
+        firstName: p.firstName,
+        lastname: p.lastName,
+        email: p.email,
+        age: Number(p.age),
+        gender: p.gender,
+        aadharNo: p.passport, 
+        
+      })),
+      flight: {
+        airline,
+        flightNumber,
+        departureCity,
+        arrivalCity,
+        departureTime,
+        arrivalTime,
+      },
+      totalAmount: total,
+      paymentMethod: selectedPayment,
+      barcode: item?.barcode || "",
+    };
+
+    const response = await axios.post(
+      "https://airkart-backend.onrender.com/api/v1/book",
+      ticketData
+    );
+
+    if (response.data.success) {
+      if (setBookedTickets) {
+        setBookedTickets({
+          flight,
+          passengers: passengerData,
+          total,
+          departureCity,
+          arrivalCity,
+          flightLogo,
+          departureTime,
+          arrivalTime,
+        });
+      }
+      setPopup({ show: true, message: "Ticket sent to your email 📧" });
+      navigate("/bookedticket");
+    } else {
+      setPopup({ show: true, message: "Booking failed ❌" });
+    }
+  } catch (error) {
+    console.error("Booking error:", error);
+    setPopup({ show: true, message: "Booking failed ❌" });
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 1500));
   setPopup({ show: false, message: "" });
-  navigate("/"); // Redirect to Home
 };
-
 
   return (
     <div className="min-h-screen py-10 px-6 relative">
-      {/* Header */}
+      
       <motion.div
         className="flex gap-2 justify-center items-center text-4xl md:text-5xl font-bold mb-10"
         initial={{ opacity: 0, y: -30 }}
@@ -118,7 +164,6 @@ const Passengerform = () => {
         <h1 className="text-purple-700">{arrivalCity}</h1>
       </motion.div>
 
-      {/* Passenger Counter */}
       <motion.div className="flex justify-center items-center gap-6 mb-10">
         <button
           onClick={minusHandler}
@@ -253,7 +298,7 @@ const Passengerform = () => {
         </motion.div>
       )}
 
-      {/* Popup Modal */}
+      
       {popup.show && (
         <motion.div
           className="fixed inset-0 backdrop-blur-xl  bg-opacity-50 flex items-center justify-center z-50"

@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Appcontext } from "../Context/Appcontext";
 
 const SignIn = () => {
-  const { loggedIn, setLoggedIn, user, setUser, backendurl } =
-    useContext(Appcontext);
+  const { loggedIn, setLoggedIn, user, setUser, backendurl } = useContext(Appcontext);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -57,6 +56,8 @@ const SignIn = () => {
       });
 
       if (data.success) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         setUser(data.user);
         setMessage(
           loggedIn
@@ -64,7 +65,7 @@ const SignIn = () => {
             : "✅ Account created successfully! Redirecting..."
         );
 
- 
+      
         setLoading(false);
         
 

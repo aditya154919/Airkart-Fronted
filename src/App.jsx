@@ -44,11 +44,11 @@ const App = () => {
     >
       
       <Navbar openNav={openNav} setOpenNav={setOpenNav} />
-      <div className="text-4xl text-sky-500 font-semibold font-serif text-right px-10 md:px-73">
+      {/* <div className="text-4xl text-sky-500 font-semibold font-serif text-right px-10 md:px-73">
               {
                 !user ? "":`Hello ${user.name.split(' ')[0]}`
               }
-      </div>
+      </div> */}
 
       <AnimatePresence mode="wait">
         <motion.div
