@@ -11,7 +11,7 @@ It allows users to **search flights, book tickets, and manage reservations** wit
 - 🎟️ **Ticket Booking** – Enter passenger details and confirm reservations.  
 - 📑 **View Booked Tickets** – See your confirmed reservations.  
 - 💳 **Payment Integration** – Simulated payment flow for ticket booking.  
-- 🔐 **Authentication** – Sign in / Sign up (Clerk or any auth provider).  
+- 🔐 **Authentication** – Sign in / Sign up /Reset password.  
 - 🎨 **Modern UI** – Built with React, TailwindCSS, and Framer Motion for animations.  
 
 ---
